@@ -1,822 +1,528 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE HABITAT | Propiedades Premium</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<title>Flash Burger - Menú Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        dark: '#0a0a0a',
+                        darker: '#050505',
+                        gold: '#D4AF37',
+                        goldHover: '#F3D266',
+                        warmOrange: '#E67E22'
+                    }
+                }
+            }
+        }
+    </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        
+        .gsap-reveal { visibility: hidden; }
+        
+        .property-img { transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1); }
+        .group:hover .property-img { transform: scale(1.1); }
+        
+        .property-info {
+            transform: translateY(20px);
+            opacity: 0.9;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .group:hover .property-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
 
-<style>
-/* ===================================================== */
-/* GENERAL */
-/* ===================================================== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+        .btn-hover-effect { transition: all 0.3s ease; }
+        .btn-hover-effect:hover {
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
 
-html {
-  scroll-behavior: smooth; 
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #111;
-  color: white;
-  overflow-x: hidden;
-}
-
-/* ===================================================== */
-/* HERO (INICIO) */
-/* ===================================================== */
-#inicio {
-  height: 100vh;
-  background: linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),
-              url('https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1965&auto=format&fit=crop') center/cover no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-#inicio .contenido {
-  max-width: 700px;
-  padding: 20px;
-}
-
-#inicio h1 {
-  font-size: 70px;
-  margin-bottom: 20px;
-  color: #ffb703;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-#inicio p {
-  font-size: 20px;
-  margin-bottom: 35px;
-  color: #ddd;
-}
-
-#inicio button {
-  background: linear-gradient(45deg,#ff3c00,#ff9100);
-  border: none;
-  padding: 16px 40px;
-  color: white;
-  font-size: 17px;
-  font-weight: 700;
-  cursor: pointer;
-  border-radius: 12px;
-  transition: transform 0.2s;
-}
-
-#inicio button:hover {
-  transform: scale(1.05);
-}
-
-/* ===================================================== */
-/* CONTENEDOR PRINCIPAL MENÚ (CON FONDO ALUSIVO) */
-/* ===================================================== */
-#menu-principal {
-  display: none; /* Oculto inicialmente */
-  min-height: 100vh;
-  
-  /* Fondo premium: Imagen de comida muy oscurecida para no distraer */
-  background: linear-gradient(rgba(17, 17, 17, 0.92), rgba(17, 17, 17, 0.92)),
-              url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1920&auto=format&fit=crop') center/cover fixed;
-}
-
-.navbar {
-  width: 100%;
-  background: #1b1b1b;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 60px;
-  border-bottom: 2px solid #ff6b00;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-}
-
-.logo {
-  font-size: 30px;
-  font-weight: 800;
-  color: #ffb703;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: white;
-  font-weight: 500;
-  cursor: default;
-}
-
-/* ===================================================== */
-/* PANTALLA 1: SELECCIÓN DE CATEGORÍAS */
-/* ===================================================== */
-.header-titulo {
-  text-align: center;
-  padding: 40px 20px 20px;
-}
-
-.header-titulo h1 {
-  font-size: 45px;
-  color: #ffb703;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.header-titulo p {
-  color: #ccc;
-  font-size: 18px;
-  margin-top: 10px;
-}
-
-.grid-categorias {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  padding: 30px 60px 60px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.card-cat {
-  height: 220px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  font-weight: 800;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 2px 4px 10px rgba(0,0,0,0.9);
-  cursor: pointer;
-  transition: 0.4s;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-}
-
-.card-cat::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.45); /* Filtro oscuro */
-  transition: 0.4s;
-  z-index: 1;
-}
-
-.card-cat:hover::before {
-  background: rgba(0,0,0,0.1); /* Se aclara al pasar el mouse */
-}
-
-.card-cat span {
-  position: relative;
-  z-index: 2;
-}
-
-.card-cat:hover {
-  transform: translateY(-10px);
-  border-color: #ffb703;
-  box-shadow: 0 15px 30px rgba(255, 107, 0, 0.4);
-}
-
-/* Imágenes de fondo para categorías actualizadas */
-.cat-hamburguesas { background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1000&auto=format&fit=crop'); }
-.cat-perros { background-image: url('https://img.magnific.com/fotos-premium/deliciosas-imagenes-perritos-calientes-generativa-ai_995884-1109.jpg'); } /* Imagen nueva de perro */
-.cat-pizzas { background-image: url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=1000&auto=format&fit=crop'); }
-.cat-salchipapas { background-image: url('https://th.bing.com/th/id/R.c27b6a3dd58d72a6e1aeac6630c4e95d?rik=q6FNH5P2dmGbTw&pid=ImgRaw&r=0p'); } /* Imagen nueva de papas cargadas */
-.cat-bebidas { background-image: url('https://images.unsplash.com/photo-1543253687-c931c8e01820?q=80&w=1000&auto=format&fit=crop'); } /* Nueva categoría */
-.cat-helados { background-image: url('https://images.unsplash.com/photo-1559703248-dcaaec9fab78?q=80&w=1000&auto=format&fit=crop'); } /* Nueva categoría */
-
-/* ===================================================== */
-/* PANTALLA 2: PRODUCTOS ESPECÍFICOS */
-/* ===================================================== */
-#pantalla-productos {
-  display: none;
-  padding: 40px 60px;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.header-productos {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 40px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 20px;
-}
-
-.btn-volver {
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-volver:hover {
-  background: #ffb703;
-  color: #111;
-}
-
-.header-productos h2 {
-  font-size: 35px;
-  color: #ffb703;
-  text-transform: uppercase;
-}
-
-.grid-productos {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 25px;
-}
-
-/* ===================================================== */
-/* CARDS DE PRODUCTO */
-/* ===================================================== */
-.card {
-  background: #1b1b1b;
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: .3s;
-  border: 1px solid #2f2f2f;
-  display: flex;
-  flex-direction: column;
-}
-
-.card:hover {
-  transform: translateY(-8px);
-  border-color: #ffb703;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.6);
-}
-
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.card-info {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.card h3 {
-  font-size: 20px;
-  color: #ffb703;
-  margin-bottom: 5px;
-}
-
-.card p {
-  font-size: 14px;
-  color: #ccc;
-  flex-grow: 1;
-}
-
-.precio {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-.precio strong {
-  font-size: 22px;
-  color: #ff6b00;
-}
-
-.btn-pedir {
-  width: 100%;
-  padding: 12px;
-  background: #2a2a2a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.card:hover .btn-pedir {
-  background: linear-gradient(45deg,#ff3c00,#ff9100);
-}
-
-.badge-premium {
-  background: #ffb703;
-  color: #111;
-  padding: 5px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  display: inline-block;
-}
-
-/* ===================================================== */
-/* MODAL E INGREDIENTES */
-/* ===================================================== */
-.modal {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,.85);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-.modal-content {
-  background: #1b1b1b;
-  width: 90%;
-  max-width: 430px;
-  border-radius: 20px;
-  padding: 22px;
-  text-align: center;
-  border: 1px solid #333;
-  max-height: 90vh;
-  overflow: auto;
-}
-
-.modal-content img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 14px;
-}
-
-.modal-content h2 { margin: 15px 0 10px; color: #ffb703; }
-.modal-content #precio { font-size: 22px; font-weight: bold; color: #ff6b00; margin-bottom: 10px; }
-
-.modal-content button {
-  margin-top: 10px;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  color: white;
-}
-
-.btn-agregar-modal { background: linear-gradient(45deg,#ff3c00,#ff9100); }
-.btn-cerrar-modal { background: #333; }
-
-.ingredientes-box {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background: #222;
-  padding: 15px;
-  border-radius: 12px;
-  text-align: left;
-}
-.ingredientes-box h3 { color: #ffb703; margin-bottom: 15px; text-align: center; font-size: 16px; }
-.ingrediente-item { display: flex; align-items: center; justify-content: space-between; background: #2c2c2c; padding: 10px 12px; border-radius: 10px; margin-bottom: 10px; }
-.ingrediente-item label { font-size: 14px; cursor: pointer; width: 100%; }
-.ingrediente-item input { width: 18px; height: 18px; cursor: pointer; }
-
-/* ===================================================== */
-/* CARRITO & PANEL */
-/* ===================================================== */
-.carrito-float {
-  position: fixed; right: 35px; bottom: 35px; width: 70px; height: 70px; border-radius: 50%;
-  background: linear-gradient(45deg,#ff3c00,#ff9100);
-  display: flex; align-items: center; justify-content: center; font-size: 30px; cursor: pointer;
-  z-index: 9999; box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4); transition: transform 0.3s;
-}
-.carrito-float:hover { transform: scale(1.1); }
-.carrito-float span {
-  position: absolute; top: -5px; right: -5px; background: white; color: #111; width: 26px; height: 26px;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;
-}
-
-.panel-carrito {
-  position: fixed; top: 0; right: -400px; width: 360px; max-width: 100%; height: 100vh;
-  background: #1b1b1b; z-index: 99999; padding: 25px; transition: .4s; overflow: auto;
-  box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-}
-.panel-carrito.active { right: 0; }
-.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-.panel-header h2 { color: #ffb703; }
-.panel-header button { border: none; background: #333; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; }
-.panel-header button:hover { background: #ff3c00; }
-.panel-carrito input { width: 100%; padding: 14px; border: none; border-radius: 10px; margin-bottom: 20px; background: #2a2a2a; color: white; font-family: inherit; }
-#lista p { background: #252525; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #ff6b00; display: flex; flex-direction: column; }
-#lista p span { font-weight: bold; color: #ffb703; margin-top: 5px; }
-#total { margin-top: 20px; font-size: 22px; font-weight: 800; color: #ff6b00; text-align: right; }
-.btn-recibo { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(45deg,#ff3c00,#ff9100); color: white; font-weight: 700; font-size: 16px; margin-top: 20px; cursor: pointer; }
-
-/* Utilidades */
-.oculto { display: none !important; }
-
-/* Responsive */
-@media(max-width: 768px) {
-  .grid-categorias { padding: 20px; gap: 20px; }
-  .card-cat { height: 180px; font-size: 24px; }
-  #pantalla-productos { padding: 20px; }
-  .navbar { padding: 15px 20px; }
-}
-</style>
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+        .animate-bounce-slow { animation: bounce 2s infinite ease-in-out; }
+    </style>
 </head>
+<body class="antialiased selection:bg-gold selection:text-darker">
 
-<body>
+    <header class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1515366974328-f1181eb25189?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWVkZWxsaW4lMjBjb2xvbWJpYXxlbnwwfHwwfHx8MA%3D%3D" alt="Lujo" class="w-full h-full object-cover parallax-bg" />
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-darker/90 via-darker/60 to-darker z-10"></div>
 
-<section id="inicio">
-  <div class="contenido">
-    <h1>Flash Burger</h1>
-    <p>Disfruta de las mejores comidas rápidas desde casa</p>
-    <button onclick="iniciarMenu()">Ver menú 🍔</button>
-  </div>
-</section>
+        <nav class="fixed top-0 w-full z-50 px-6 py-6 transition-all duration-300" id="navbar">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <a href="#" class="text-2xl font-extrabold tracking-widest text-white flex items-center gap-2 logo-anim">
+                    <span class="text-gold"><i class="fa-solid fa-gem"></i></span> LUXE<span class="font-light">HABITAT</span>
+                </a>
+                <div class="hidden md:flex gap-8 font-semibold text-sm tracking-wide nav-links-anim">
+                    <a href="#" class="hover:text-gold transition">Inicio</a>
+                    <a href="#destacadas" class="hover:text-gold transition">Destacadas</a>
+                    <a href="#catálogo" class="hover:text-gold transition">Catálogo</a>
+                    <a href="#nosotros" class="hover:text-gold transition">Nosotros</a>
+                    <a href="#contacto" class="hover:text-gold transition">Contacto</a>
+                </div>
+                <button class="md:hidden text-white text-2xl"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </nav>
 
-<section id="menu-principal">
+        <div class="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center hero-content-anim">
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 tracking-tight">
+                Propiedades que <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold to-warmOrange">inspiran</span> tu vida
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-10 font-light max-w-2xl">
+                Encuentra tu hogar de lujo en las mejores ubicaciones. Diseño, exclusividad y confort a tu alcance.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="#catálogo" class="bg-gold text-darker font-bold py-4 px-8 rounded uppercase tracking-wider btn-hover-effect">
+                    Ver Catálogo Completo
+                </a>
+            </div>
+        </div>
 
-  <div class="navbar">
-    <div class="logo">Flash Burger</div>
-    <div class="nav-links">
-      <a href="#">Menú Digital</a>
-    </div>
-  </div>
+        <div class="absolute bottom-10 z-20 flex flex-col items-center animate-bounce-slow">
+            <span class="text-xs uppercase tracking-widest text-gray-400 mb-2">Scroll</span>
+            <i class="fa-solid fa-arrow-down text-gold"></i>
+        </div>
+    </header>
 
-  <div id="pantalla-categorias">
-    <div class="header-titulo">
-      <h1>¿Qué se te antoja hoy?</h1>
-      <p>Selecciona una categoría para ver nuestras opciones</p>
-    </div>
+    <section id="destacadas" class="py-24 bg-darker">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12 gsap-reveal reveal-up">
+                <div>
+                    <h2 class="text-gold text-sm font-bold tracking-widest uppercase mb-2">Exclusividad</h2>
+                    <h3 class="text-4xl font-extrabold">Joyas Arquitectónicas</h3>
+                </div>
+                <a href="#catálogo" class="hidden md:block text-gray-400 hover:text-white transition">Ver todas las propiedades <i class="fa-solid fa-arrow-right ml-2"></i></a>
+            </div>
 
-    <div class="grid-categorias">
-      <div class="card-cat cat-hamburguesas" onclick="abrirCategoria('seccion-hamburguesas', 'Hamburguesas')"><span>Hamburguesas</span></div>
-      <div class="card-cat cat-perros" onclick="abrirCategoria('seccion-perros', 'Perros Calientes')"><span>Perros</span></div>
-      <div class="card-cat cat-pizzas" onclick="abrirCategoria('seccion-pizzas', 'Pizzas')"><span>Pizzas</span></div>
-      <div class="card-cat cat-salchipapas" onclick="abrirCategoria('seccion-salchipapas', 'Salchipapas')"><span>Salchipapas</span></div>
-      <div class="card-cat cat-bebidas" onclick="abrirCategoria('seccion-bebidas', 'Bebidas')"><span>Bebidas</span></div>
-      <div class="card-cat cat-helados" onclick="abrirCategoria('seccion-helados', 'Helados y Postres')"><span>Helados</span></div>
-    </div>
-  </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="group relative rounded-xl overflow-hidden cursor-pointer gsap-reveal reveal-card bg-dark property-trigger"
+                     data-title="Villa Colombia" data-location="Medellín, Antioquia" data-price="$8,966,081 COP"
+                     data-img="https://www.uzvillas.com/properties/co/71/71-1-700.jpg"
+                     data-beds="5 Hab" data-baths="5 Baños" data-sqm="850 m²"
+                     data-desc="Esta espectacular villa de diseño vanguardista cuenta con acabados de mármol importado, un avanzado sistema de automatización para el hogar, piscina infinita climatizada y una vista panorámica inigualable de toda la ciudad.">
+                    <div class="h-[450px] w-full overflow-hidden relative">
+                        <img src="https://www.uzvillas.com/properties/co/71/71-1-700.jpg" alt="Villa Lujo" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-darker/40 to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-gold text-darker text-xs font-bold px-3 py-1 rounded uppercase">Venta Premium</div>
+                        <div class="absolute bottom-0 left-0 w-full p-6 property-info">
+                            <h4 class="text-2xl font-bold mb-1">Villa Colombia</h4>
+                            <p class="text-gray-400 text-sm mb-3"><i class="fa-solid fa-location-dot text-gold mr-2"></i>Medellín, Colombia</p>
+                            <div class="text-3xl font-extrabold text-gold">$8,966,081 COP</div>
+                        </div>
+                    </div>
+                </div>
 
-  <div id="pantalla-productos">
-    <div class="header-productos">
-      <button class="btn-volver" onclick="volverCategorias()">⬅ Volver</button>
-      <h2 id="titulo-categoria">Categoría</h2>
-    </div>
+                <div class="group relative rounded-xl overflow-hidden cursor-pointer gsap-reveal reveal-card bg-dark property-trigger"
+                     data-title="Penthouse Bogotá" data-location="Chicó Alto, Bogotá" data-price="$10,624,227 COP"
+                     data-img="https://latinexclusive.com/sites/default/files/styles/destinations/public/penthouse_de_lujo_bogota.jpg?itok=zzr7oXFL&c=a8e99e93df0cfcc73c2284e5171c4878"
+                     data-beds="3 Hab" data-baths="4.5 Baños" data-sqm="425 m²"
+                     data-desc="Ubicado en el corazón financiero y residencial más exclusivo, este penthouse dúplex ofrece ventanales de piso a techo con vistas a los cerros orientales, terraza privada con jacuzzi y acabados italianos personalizados.">
+                    <div class="h-[450px] w-full overflow-hidden relative">
+                        <img src="https://latinexclusive.com/sites/default/files/styles/destinations/public/penthouse_de_lujo_bogota.jpg?itok=zzr7oXFL&c=a8e99e93df0cfcc73c2284e5171c4878" alt="Penthouse Lujo" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-darker/40 to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-warmOrange text-white text-xs font-bold px-3 py-1 rounded uppercase">Destacado</div>
+                        <div class="absolute bottom-0 left-0 w-full p-6 property-info">
+                            <h4 class="text-2xl font-bold mb-1">Penthouse Bogotá</h4>
+                            <p class="text-gray-400 text-sm mb-3"><i class="fa-solid fa-location-dot text-gold mr-2"></i>Bogotá, Colombia</p>
+                            <div class="text-3xl font-extrabold text-gold">$10,624,227 COP</div>
+                        </div>
+                    </div>
+                </div>
 
-    <div id="seccion-hamburguesas" class="grid-productos oculto">
-      <div class="card" onclick="abrir('Hamburguesa Clásica','Tradicional de la casa','14000','https://placehold.co/400x300/2a2a2a/ffb703?text=Clasica',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Clasica" alt="Clásica">
-        <div class="card-info"><h3>Clásica</h3><p>Tradicional de la casa</p><div class="precio"><strong>COP 14.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Hamburguesa Especial','Doble carne y extra queso','19000','https://placehold.co/400x300/2a2a2a/ffb703?text=Especial',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Especial" alt="Especial">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Especial</h3><p>Doble carne, doble sabor</p><div class="precio"><strong>COP 19.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Burger de Pollo','Pechuga crispy apanada','16000','https://placehold.co/400x300/2a2a2a/ffb703?text=Pollo+Crispy',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Pollo+Crispy" alt="Pollo">
-        <div class="card-info"><h3>Pollo Crispy</h3><p>Pechuga crujiente apanada</p><div class="precio"><strong>COP 16.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('BBQ Bacon','Carne bañada en BBQ y tocineta crocante','18000','https://placehold.co/400x300/2a2a2a/ffb703?text=BBQ+Bacon',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=BBQ+Bacon" alt="BBQ Bacon">
-        <div class="card-info"><h3>BBQ Bacon</h3><p>Salsa BBQ artesanal y tocineta</p><div class="precio"><strong>COP 18.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Doble Premium','Doble carne Angus, doble queso cheddar','24000','https://placehold.co/400x300/2a2a2a/ffb703?text=Doble+Premium',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Doble+Premium" alt="Doble Premium">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Doble Premium</h3><p>Carne 100% Angus y cheddar</p><div class="precio"><strong>COP 24.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Vegetariana','Medallón de lentejas y vegetales','15000','https://placehold.co/400x300/2a2a2a/ffb703?text=Vegetariana',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Vegetariana" alt="Vegetariana">
-        <div class="card-info"><h3>Vegetariana</h3><p>Delicioso medallón de lentejas</p><div class="precio"><strong>COP 15.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-    </div>
+                <div class="group relative rounded-xl overflow-hidden cursor-pointer gsap-reveal reveal-card bg-dark property-trigger"
+                     data-title="Mansión de Lujo" data-location="Castillogrande, Cartagena" data-price="$1,000,800,000 COP"
+                     data-img="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mzk5OTA4OTk%3D/original/6e0dfead-368f-4097-b462-503bae55271e.jpeg"
+                     data-beds="6 Hab" data-baths="8 Baños" data-sqm="1200 m²"
+                     data-desc="Una joya de la arquitectura moderna frente al mar Caribe. Cuenta con muelle privado, helipuerto secundario, cine privado, cava subterránea climatizada y automatización robótica integral.">
+                    <div class="h-[450px] w-full overflow-hidden relative">
+                        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6Mzk5OTA4OTk%3D/original/6e0dfead-368f-4097-b462-503bae55271e.jpeg" alt="Mansion Lujo" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-darker/40 to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-gold text-darker text-xs font-bold px-3 py-1 rounded uppercase">Nuevo</div>
+                        <div class="absolute bottom-0 left-0 w-full p-6 property-info">
+                            <h4 class="text-2xl font-bold mb-1">Mansión de Lujo</h4>
+                            <p class="text-gray-400 text-sm mb-3"><i class="fa-solid fa-location-dot text-gold mr-2"></i>Cartagena, Colombia</p>
+                            <div class="text-3xl font-extrabold text-gold">$1,000,800,000 COP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div id="seccion-perros" class="grid-productos oculto">
-      <div class="card" onclick="abrir('Perro Sencillo','Clásico perro caliente','10000','https://placehold.co/400x300/2a2a2a/ffb703?text=Sencillo',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Sencillo" alt="Sencillo">
-        <div class="card-info"><h3>Sencillo</h3><p>Clásico perro caliente</p><div class="precio"><strong>COP 10.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Perro Especial','Con queso fundido y tocineta','13000','https://placehold.co/400x300/2a2a2a/ffb703?text=Especial',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Especial" alt="Especial">
-        <div class="card-info"><h3>Perro Especial</h3><p>Queso fundido y tocineta</p><div class="precio"><strong>COP 13.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Perro Suizo','Queso costeño y suero','15000','https://placehold.co/400x300/2a2a2a/ffb703?text=Suizo',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Suizo" alt="Suizo">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Perro Suizo</h3><p>Queso costeño y suero</p><div class="precio"><strong>COP 15.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Perro Mexicano','Guacamole, jalapeños y nachos picados','16000','https://placehold.co/400x300/2a2a2a/ffb703?text=Mexicano',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Mexicano" alt="Mexicano">
-        <div class="card-info"><h3>Perro Mexicano</h3><p>Guacamole y jalapeños</p><div class="precio"><strong>COP 16.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Perro Hawaiano','Piña calada y extra queso mozzarella','14000','https://placehold.co/400x300/2a2a2a/ffb703?text=Hawaiano',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Hawaiano" alt="Hawaiano">
-        <div class="card-info"><h3>Perro Hawaiano</h3><p>Piña calada y mozzarella</p><div class="precio"><strong>COP 14.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Mega Perro','Doble salchicha, tocineta y full queso','20000','https://placehold.co/400x300/2a2a2a/ffb703?text=Mega+Perro',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Mega+Perro" alt="Mega Perro">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Mega Perro</h3><p>Doble salchicha americana</p><div class="precio"><strong>COP 20.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-    </div>
+    <section id="detalle-propiedad" class="py-24 bg-dark hidden border-y border-gray-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-10">
+                <button id="btn-cerrar-detalle" class="text-gray-400 hover:text-gold transition flex items-center gap-2 mb-6">
+                    <i class="fa-solid fa-arrow-left"></i> Volver al catálogo
+                </button>
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div>
+                        <span class="text-gold text-xs font-bold tracking-widest uppercase mb-2 block"><i class="fa-solid fa-gem mr-1"></i> Residencia Seleccionada</span>
+                        <h2 id="sec-title" class="text-4xl md:text-5xl font-extrabold mb-2 text-white"></h2>
+                        <p id="sec-location" class="text-gray-400 text-lg"></p>
+                    </div>
+                    <div id="sec-price" class="text-4xl font-extrabold text-gold"></div>
+                </div>
+            </div>
 
-    <div id="seccion-pizzas" class="grid-productos oculto">
-      <div class="card" onclick="abrir('Pizza Peperoni','Personal de peperoni','15000','https://placehold.co/400x300/2a2a2a/ffb703?text=Peperoni',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Peperoni" alt="Peperoni">
-        <div class="card-info"><h3>Peperoni</h3><p>Tamaño personal (4 porciones)</p><div class="precio"><strong>COP 15.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Pizza Hawaiana','Personal piña y jamón','15000','https://placehold.co/400x300/2a2a2a/ffb703?text=Hawaiana',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Hawaiana" alt="Hawaiana">
-        <div class="card-info"><h3>Hawaiana</h3><p>Tamaño personal (4 porciones)</p><div class="precio"><strong>COP 15.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Pizza Carnes','Personal mixta de carnes','18000','https://placehold.co/400x300/2a2a2a/ffb703?text=Carnes',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Carnes" alt="Carnes">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Full Carnes</h3><p>Salami, jamón, cabano</p><div class="precio"><strong>COP 18.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Pizza Vegetariana','Pimentón, cebolla, champiñones y aceitunas','16000','https://placehold.co/400x300/2a2a2a/ffb703?text=Vegetariana',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Vegetariana" alt="Vegetariana">
-        <div class="card-info"><h3>Vegetariana</h3><p>Mix de vegetales frescos</p><div class="precio"><strong>COP 16.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Pollo y Champiñones','Clásica combinación cremosa','17000','https://placehold.co/400x300/2a2a2a/ffb703?text=Pollo+Champiñon',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Pollo+Champiñon" alt="Pollo Champiñones">
-        <div class="card-info"><h3>Pollo Champiñones</h3><p>Pollo desmechado y salsa</p><div class="precio"><strong>COP 17.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Pizza Ranchera','Chorizo, maíz, tocineta y jalapeños','19000','https://placehold.co/400x300/2a2a2a/ffb703?text=Ranchera',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Ranchera" alt="Ranchera">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Ranchera</h3><p>Estilo mexicano/ranchero</p><div class="precio"><strong>COP 19.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-    </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2">
+                    <div class="w-full h-[500px] rounded-2xl overflow-hidden mb-8 shadow-2xl">
+                        <img id="sec-img" src="" alt="Propiedad Seleccionada" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-darker p-8 rounded-xl border border-gray-800">
+                        <h3 class="text-xl font-bold mb-6 border-b border-gray-800 pb-4">Especificaciones Clave</h3>
+                        <div id="sec-specs" class="flex flex-wrap gap-8 text-lg text-gray-300 mb-8"></div>
+                        <h3 class="text-xl font-bold mb-4">Descripción Completa</h3>
+                        <p id="sec-desc" class="text-gray-400 leading-relaxed font-light text-lg"></p>
+                    </div>
+                </div>
 
-    <div id="seccion-salchipapas" class="grid-productos oculto">
-      <div class="card" onclick="abrir('Salchipapa Sencilla','Papas a la francesa y salchicha','12000','https://placehold.co/400x300/2a2a2a/ffb703?text=Sencilla',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Sencilla" alt="Sencilla">
-        <div class="card-info"><h3>Sencilla</h3><p>Papas y salchicha manguera</p><div class="precio"><strong>COP 12.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Salchipapa Especial','Con pollo, carne y queso','18000','https://placehold.co/400x300/2a2a2a/ffb703?text=Especial',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Especial" alt="Especial">
-        <div class="card-info"><h3>Especial</h3><p>Pollo desmechado y queso</p><div class="precio"><strong>COP 18.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Salchipapa Salvaje','Para compartir. Trae de todo','25000','https://placehold.co/400x300/2a2a2a/ffb703?text=Salvaje',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Salvaje" alt="Salvaje">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Salvaje</h3><p>Mixta gigante para 2 personas</p><div class="precio"><strong>COP 25.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Salchipapa Costeña','Queso costeño rallado, butifarra y bollo','19000','https://placehold.co/400x300/2a2a2a/ffb703?text=Costeña',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Costeña" alt="Costeña">
-        <div class="card-info"><h3>Costeña</h3><p>Auténtico sabor de la costa</p><div class="precio"><strong>COP 19.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Salchipapa Ranchera','Chorizo ranchero, tocineta y maíz','17000','https://placehold.co/400x300/2a2a2a/ffb703?text=Ranchera',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Ranchera" alt="Ranchera">
-        <div class="card-info"><h3>Ranchera</h3><p>Con chorizo picado y tocineta</p><div class="precio"><strong>COP 17.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Salchipapa Gratinada','Bañada en tres quesos fundidos al horno','22000','https://placehold.co/400x300/2a2a2a/ffb703?text=Gratinada',true)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Gratinada" alt="Gratinada">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Gratinada</h3><p>Capa extra de quesos al horno</p><div class="precio"><strong>COP 22.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-    </div>
+                <div class="lg:col-span-1">
+                    <div class="bg-gradient-to-b from-gray-900 to-darker p-8 rounded-xl border border-gold/30 sticky top-28 shadow-2xl">
+                        <h3 class="text-2xl font-bold mb-2">Adquisición & Reserva</h3>
+                        <p class="text-sm text-gray-400 mb-6">Completa tus datos para agendar una visita privada y arrancar el trámite legal formal con nuestro equipo jurídico legal.</p>
+                        <form class="flex flex-col gap-4">
+                            <div>
+                                <label class="text-xs text-gray-400 uppercase tracking-wide mb-2 block">Nombre Completo</label>
+                                <input type="text" required class="w-full bg-dark border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-gold transition">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-400 uppercase tracking-wide mb-2 block">Número Telefónico</label>
+                                <input type="tel" required class="w-full bg-dark border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-gold transition">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-400 uppercase tracking-wide mb-2 block">Fecha de Agenda Propuesta</label>
+                                <input type="date" required class="w-full bg-dark border border-gray-700 text-white px-4 py-3 rounded focus:outline-none focus:border-gold transition">
+                            </div>
+                            <button type="button" onclick="alert('Tu solicitud de reserva ha sido enviada con éxito. Un agente de alta gama se comunicará contigo en menos de 24 horas.')" class="w-full bg-gold text-darker font-bold py-4 mt-2 rounded uppercase tracking-wider hover:bg-goldHover transition shadow-lg btn-hover-effect">
+                                Solicitar Reserva de Propiedad
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div id="seccion-bebidas" class="grid-productos oculto">
-      <div class="card" onclick="abrir('Coca-Cola','Gaseosa 400ml bien fría','4500','https://placehold.co/400x300/2a2a2a/ffb703?text=Coca-Cola',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Coca-Cola" alt="Coca-Cola">
-        <div class="card-info"><h3>Coca-Cola</h3><p>Botella 400ml</p><div class="precio"><strong>COP 4.500</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Sprite','Gaseosa 400ml bien fría','4500','https://placehold.co/400x300/2a2a2a/ffb703?text=Sprite',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Sprite" alt="Sprite">
-        <div class="card-info"><h3>Sprite</h3><p>Botella 400ml</p><div class="precio"><strong>COP 4.500</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Jugo Natural','Jugo de Lulo, Mora o Mango','6000','https://placehold.co/400x300/2a2a2a/ffb703?text=Jugo',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Jugo" alt="Jugo Natural">
-        <div class="card-info"><h3>Jugo Natural</h3><p>Lulo, Mora o Mango en agua</p><div class="precio"><strong>COP 6.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Cerveza Club Colombia','Cerveza dorada bien fría','7000','https://placehold.co/400x300/2a2a2a/ffb703?text=Cerveza',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Cerveza" alt="Cerveza">
-        <div class="card-info"><h3>Club Colombia</h3><p>Dorada 330ml</p><div class="precio"><strong>COP 7.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-    </div>
+    <section id="catálogo" class="py-24 bg-dark">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 gsap-reveal reveal-up">
+                <h2 class="text-gold text-sm font-bold tracking-widest uppercase mb-2">Portafolio Premium</h2>
+                <h3 class="text-4xl font-extrabold mb-8">Mansiones, Penthouses y Villas</h3>
+                
+                <div class="flex flex-wrap justify-center gap-4" id="filter-buttons">
+                    <button class="filter-btn active px-6 py-2 rounded-full bg-gold text-darker font-semibold text-sm transition" data-filter="all">Todos</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-600 text-gray-300 hover:border-gold hover:text-gold font-semibold text-sm transition" data-filter="venta">En Venta</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-600 text-gray-300 hover:border-gold hover:text-gold font-semibold text-sm transition" data-filter="renta">En Renta / Arriendo</button>
+                </div>
+            </div>
 
-    <div id="seccion-helados" class="grid-productos oculto">
-      <div class="card" onclick="abrir('Cono Vainilla','Helado clásico en galleta crocante','4000','https://placehold.co/400x300/2a2a2a/ffb703?text=Cono',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Cono" alt="Cono Vainilla">
-        <div class="card-info"><h3>Cono Vainilla</h3><p>Galleta crocante</p><div class="precio"><strong>COP 4.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Brownie con Helado','Brownie caliente con bola de vainilla','9000','https://placehold.co/400x300/2a2a2a/ffb703?text=Brownie',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Brownie" alt="Brownie">
-        <div class="card-info"><h3>Brownie Helado</h3><p>Caliente y frío, el mix perfecto</p><div class="precio"><strong>COP 9.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Malteada de Fresa','Con crema chantilly y cereza','11000','https://placehold.co/400x300/2a2a2a/ffb703?text=Malteada',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Malteada" alt="Malteada">
-        <div class="card-info"><span class="badge-premium">Premium</span><h3>Malteada</h3><p>Fresa espesa con chantilly</p><div class="precio"><strong>COP 11.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-      <div class="card" onclick="abrir('Copa Sundae','Helado de chocolate, salsa y maní','8000','https://placehold.co/400x300/2a2a2a/ffb703?text=Sundae',false)">
-        <img src="https://placehold.co/400x300/2a2a2a/ffb703?text=Sundae" alt="Sundae">
-        <div class="card-info"><h3>Copa Sundae</h3><p>Salsa de chocolate y maní</p><div class="precio"><strong>COP 8.000</strong></div><button class="btn-pedir">Pedir ahora</button></div>
-      </div>
-    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="catalog-grid">
+                
+                <div class="catalog-item group relative rounded-xl overflow-hidden cursor-pointer bg-darker border border-gray-900 property-trigger"
+                     data-status="renta" data-title="Villa Amalfi" data-location="Santa Marta, Magdalena" data-price="$18,500,000 COP / Mes"
+                     data-img="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200"
+                     data-beds="4 Hab" data-baths="5 Baños" data-sqm="620 m²"
+                     data-desc="Espectacular villa de descanso disponible para arriendo a largo plazo. Cuenta con acceso directo a playa privada, zona de barbacoa de diseño abierto, piscina infinita frente al mar Caribe y servicio de seguridad privada.">
+                    <div class="h-[350px] w-full overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=1200" alt="Villa Amalfi" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-white text-darker text-xs font-bold px-3 py-1 rounded uppercase">Renta Premium</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold mb-1">Villa Amalfi</h4>
+                        <p class="text-gray-500 text-xs mb-3"><i class="fa-solid fa-location-dot text-gold mr-1"></i> Santa Marta</p>
+                        <div class="text-2xl font-extrabold text-gold">$18,500,000 <span class="text-xs text-gray-400 font-normal">COP/Mes</span></div>
+                    </div>
+                </div>
 
-  </div>
-</section>
+                <div class="catalog-item group relative rounded-xl overflow-hidden cursor-pointer bg-darker border border-gray-900 property-trigger"
+                     data-status="venta" data-title="Penthouse El Poblado" data-location="El Poblado, Medellín" data-price="$4,200,000,000 COP"
+                     data-img="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200"
+                     data-beds="4 Hab" data-baths="5 Baños" data-sqm="380 m²"
+                     data-desc="Lujoso penthouse dúplex en venta ubicado en una de las zonas más altas de El Poblado. Terraza envolvente de 110 metros cuadrados, chimenea flotante de gas, domótica de audio y luces Lutron incorporada.">
+                    <div class="h-[350px] w-full overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200" alt="Penthouse" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-gold text-darker text-xs font-bold px-3 py-1 rounded uppercase">En Venta</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold mb-1">Penthouse El Poblado</h4>
+                        <p class="text-gray-500 text-xs mb-3"><i class="fa-solid fa-location-dot text-gold mr-1"></i> Medellín</p>
+                        <div class="text-2xl font-extrabold text-gold">$4,200,000,000 COP</div>
+                    </div>
+                </div>
 
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <img id="imgModal" alt="Producto">
-    <h2 id="titulo"></h2>
-    <p id="desc"></p>
-    <p id="precio"></p>
-    <div class="ingredientes-box" id="cajaIngredientes">
-      <h3>Ingredientes / Salsas</h3>
-      <div id="ingredientesLista"></div>
-    </div>
-    <button class="btn-agregar-modal" onclick="agregarCarrito()">Agregar al carrito 🛒</button>
-    <button class="btn-cerrar-modal" onclick="cerrar()">Cerrar</button>
-  </div>
-</div>
+                <div class="catalog-item group relative rounded-xl overflow-hidden cursor-pointer bg-darker border border-gray-900 property-trigger"
+                     data-status="renta" data-title="Mansión San Jerónimo" data-location="San Jerónimo, Antioquia" data-price="$35,000,000 COP / Mes"
+                     data-img="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200"
+                     data-beds="7 Hab" data-baths="9 Baños" data-sqm="1500 m²"
+                     data-desc="Espectacular mansión campestre de descanso con capacidad para albergar eventos corporativos exclusivos o estancias familiares de alto nivel. Cuenta con cancha de tenis reglamentaria y turco incorporado.">
+                    <div class="h-[350px] w-full overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200" alt="Mansion San Jeronimo" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-white text-darker text-xs font-bold px-3 py-1 rounded uppercase">Renta Campestre</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold mb-1">Mansión San Jerónimo</h4>
+                        <p class="text-gray-500 text-xs mb-3"><i class="fa-solid fa-location-dot text-gold mr-1"></i> Antioquia</p>
+                        <div class="text-2xl font-extrabold text-gold">$35,000,000 <span class="text-xs text-gray-400 font-normal">COP/Mes</span></div>
+                    </div>
+                </div>
 
-<div class="carrito-float" onclick="abrirCarrito()">🛒<span id="contadorCarrito">0</span></div>
+                <div class="catalog-item group relative rounded-xl overflow-hidden cursor-pointer bg-darker border border-gray-900 property-trigger"
+                     data-status="venta" data-title="Villa Vista Mar" data-location="San Andrés Islas" data-price="$6,800,000,000 COP"
+                     data-img="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200"
+                     data-beds="5 Hab" data-baths="6 Baños" data-sqm="710 m²"
+                     data-desc="Ubicada sobre un acantilado de roca coralina, esta villa ofrece acceso privado directo al mar de los siete colores, arquitectura bioclimática de concepto abierto y terrazas multinivel de madera teca.">
+                    <div class="h-[350px] w-full overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1200" alt="Villa Vista Mar" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-gold text-darker text-xs font-bold px-3 py-1 rounded uppercase">En Venta</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold mb-1">Villa Vista Mar</h4>
+                        <p class="text-gray-500 text-xs mb-3"><i class="fa-solid fa-location-dot text-gold mr-1"></i> San Andrés</p>
+                        <div class="text-2xl font-extrabold text-gold">$6,800,000,000 COP</div>
+                    </div>
+                </div>
 
-<div class="panel-carrito" id="panelCarrito">
-  <div class="panel-header">
-    <h2>Tu Pedido 🛒</h2>
-    <button onclick="cerrarCarrito()">✖</button>
-  </div>
-  <input type="text" id="nombreCliente" placeholder="Ingresa tu nombre">
-  <div id="lista"></div>
-  <p id="total">Total: COP 0</p>
-  <button class="btn-recibo" onclick="verRecibo()">Generar pedido 🧾</button>
-</div>
+                <div class="catalog-item group relative rounded-xl overflow-hidden cursor-pointer bg-darker border border-gray-900 property-trigger"
+                     data-status="renta" data-title="Penthouse Los Rosales" data-location="Rosales, Bogotá" data-price="$22,000,000 COP / Mes"
+                     data-img="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200"
+                     data-beds="3 Hab" data-baths="4 Baños" data-sqm="310 m²"
+                     data-desc="Diseño interior minimalista a cargo de firmas internacionales galardonadas. Ofrece un aislamiento acústico total en cristales de fachada, caldera central automatizada y ascensor privado de claves biométricas.">
+                    <div class="h-[350px] w-full overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1200" alt="Penthouse Los Rosales" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-white text-darker text-xs font-bold px-3 py-1 rounded uppercase">Renta Urbana</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold mb-1">Penthouse Los Rosales</h4>
+                        <p class="text-gray-500 text-xs mb-3"><i class="fa-solid fa-location-dot text-gold mr-1"></i> Bogotá</p>
+                        <div class="text-2xl font-extrabold text-gold">$22,000,000 <span class="text-xs text-gray-400 font-normal">COP/Mes</span></div>
+                    </div>
+                </div>
 
-<script>
-let carrito = [];
-let productoActual = {};
+                <div class="catalog-item group relative rounded-xl overflow-hidden cursor-pointer bg-darker border border-gray-900 property-trigger"
+                     data-status="venta" data-title="Mansión La Calera" data-location="La Calera, Cundinamarca" data-price="$15,500,000,000 COP"
+                     data-img="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200"
+                     data-beds="5 Hab" data-baths="7 Baños" data-sqm="1100 m²"
+                     data-desc="Imponente obra de diseño arquitectónico rodeada de bosque nativo protegido. Estructuras de acero expuesto y concreto visto, calefacción radiante por zonas por suelo térmico y establo privado para equinos.">
+                    <div class="h-[350px] w-full overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200" alt="Mansion La Calera" class="property-img w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent"></div>
+                        <div class="absolute top-4 right-4 bg-gold text-darker text-xs font-bold px-3 py-1 rounded uppercase">En Venta</div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold mb-1">Mansión La Calera</h4>
+                        <p class="text-gray-500 text-xs mb-3"><i class="fa-solid fa-location-dot text-gold mr-1"></i> Cundinamarca</p>
+                        <div class="text-2xl font-extrabold text-gold">$15,500,000,000 COP</div>
+                    </div>
+                </div>
 
-/* Base de datos de ingredientes para el Modal actualizada */
-const ingredientesProductos = {
-  "Hamburguesa Clásica": ["Pan","Carne","Queso","Lechuga","Tomate","Salsas"],
-  "Hamburguesa Especial": ["Pan","Doble carne","Queso cheddar","Tocineta","Lechuga"],
-  "Burger de Pollo": ["Pan","Pollo crispy","Queso","Salsa tártara"],
-  "BBQ Bacon": ["Pan","Carne","Tocineta extra","Salsa BBQ","Queso"],
-  "Doble Premium": ["Pan Artesanal","Doble Carne Angus","Doble Cheddar","Cebolla grillé"],
-  "Vegetariana": ["Pan integral","Medallón de lentejas","Queso mozzarella","Tomate fresco"],
-  
-  "Perro Sencillo": ["Pan","Salchicha","Papita ripio","Salsas"],
-  "Perro Especial": ["Pan","Salchicha","Queso mozzarella","Tocineta"],
-  "Perro Suizo": ["Pan","Salchicha suiza","Queso costeño","Suero"],
-  "Perro Mexicano": ["Pan","Salchicha","Guacamole","Jalapeños","Nachos"],
-  "Perro Hawaiano": ["Pan","Salchicha","Queso mozzarella","Piña calada"],
-  "Mega Perro": ["Pan grande","Doble salchicha","Queso fundido","Tocineta"],
-  
-  "Salchipapa Sencilla": ["Papas fritas","Salchicha","Salsa rosada"],
-  "Salchipapa Especial": ["Papas fritas","Pollo","Carne","Queso fundido"],
-  "Salchipapa Salvaje": ["Papas fritas","Salchicha","Pollo","Carne","Chorizo","Queso","Maíz"],
-  "Salchipapa Costeña": ["Papas fritas","Queso costeño","Butifarra","Bollo limpio"],
-  "Salchipapa Ranchera": ["Papas fritas","Salchicha","Chorizo","Tocineta","Maíz tierno"],
-  "Salchipapa Gratinada": ["Papas fritas","Salchicha","Queso Mozzarella","Queso Cheddar","Parmesano"]
-};
+            </div>
+        </div>
+    </section>
 
-/* ===================================================== */
-/* NAVEGACIÓN Y TRANSICIÓN DE BLOQUEO */
-/* ===================================================== */
-function iniciarMenu(){
-  let menu = document.getElementById("menu-principal");
-  let inicio = document.getElementById("inicio");
-  
-  menu.style.display = "block";
-  menu.scrollIntoView({ behavior: 'smooth' });
+    <section id="nosotros" class="py-24 bg-darker">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="gsap-reveal reveal-left relative">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000" alt="Oficina" class="rounded-xl shadow-2xl relative z-10">
+                <div class="absolute -bottom-6 -right-6 w-full h-full border-2 border-gold rounded-xl z-0"></div>
+            </div>
+            <div class="gsap-reveal reveal-right">
+                <h2 class="text-gold text-sm font-bold tracking-widest uppercase mb-2">LUXE HABITAT</h2>
+                <h3 class="text-4xl font-extrabold mb-6">Redefiniendo el estándar inmobiliario</h3>
+                <p class="text-gray-400 mb-6 leading-relaxed text-lg">
+                    No solo mercadeamos estructuras físicas; configuramos portafolios de inversión y estilos de vida exclusivos. Nuestro equipo selecciona meticulosamente cada joya residencial.
+                </p>
+                <div class="flex items-center gap-4">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200" alt="CEO" class="w-16 h-16 rounded-full object-cover border-2 border-gold">
+                    <div>
+                        <h4 class="font-bold text-white">Nicolas Burgos</h4>
+                        <p class="text-gold text-sm">CEO & Fundador</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  let safeTimeout = setTimeout(() => { clearInterval(checkScroll); fijarMenu(); }, 1200);
-  let checkScroll = setInterval(() => {
-      if (menu.getBoundingClientRect().top <= 2) {
-          clearInterval(checkScroll); clearTimeout(safeTimeout); fijarMenu();
-      }
-  }, 15);
+    <footer id="contacto" class="bg-[#020202] pt-20 pb-10 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+            <div>
+                <a href="#" class="text-2xl font-extrabold tracking-widest text-white flex items-center gap-2 mb-6">
+                    <span class="text-gold"><i class="fa-solid fa-gem"></i></span> LUXE<span class="font-light">HABITAT</span>
+                </a>
+                <p class="text-gray-500 text-sm">La agencia líder global en corretaje inmobiliario residencial de lujo.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 text-lg tracking-wide">Contacto Ejecutivo</h4>
+                <ul class="space-y-4 text-gray-500 text-sm">
+                    <li><i class="fa-solid fa-location-dot text-gold mr-2"></i>Mocoa, Putumayo - Barrio Obrero</li>
+                    <li><i class="fa-solid fa-phone text-gold mr-2"></i>+57 322 834 7865</li>
+                    <li><i class="fa-solid fa-envelope text-gold mr-2"></i>racinesa622@gmail.com</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-6 text-lg tracking-wide">Boletín Off-Market</h4>
+                <form class="flex flex-col gap-3">
+                    <input type="email" placeholder="Inscribe tu e-mail corporativo" class="bg-gray-900 border border-gray-800 text-white px-4 py-3 rounded focus:outline-none focus:border-gold transition">
+                    <button type="button" onclick="alert('Inscrito al listado Off-Market.')" class="bg-gold text-darker font-bold py-3 rounded uppercase text-sm tracking-wider">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 text-center text-gray-600 text-xs border-t border-gray-900 pt-8">
+            &copy; 2026 Luxe Habitat Real Estate. Todos los derechos reservados.
+        </div>
+    </footer>
 
-  function fijarMenu() {
-      document.documentElement.style.scrollBehavior = 'auto';
-      inicio.style.display = 'none';
-      window.scrollTo(0, 0);
-      setTimeout(() => { document.documentElement.style.scrollBehavior = 'smooth'; }, 50);
-  }
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
 
-/* ===================================================== */
-/* LÓGICA DE CATEGORÍAS (Menú Dinámico) */
-/* ===================================================== */
-function abrirCategoria(idSeccion, nombreCategoria){
-  document.getElementById("pantalla-categorias").style.display = "none";
-  document.getElementById("pantalla-productos").style.display = "block";
-  document.getElementById("titulo-categoria").innerText = nombreCategoria;
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('.gsap-reveal').forEach(el => el.classList.remove('gsap-reveal'));
 
-  // Ocultar todas
-  document.getElementById("seccion-hamburguesas").classList.add("oculto");
-  document.getElementById("seccion-perros").classList.add("oculto");
-  document.getElementById("seccion-pizzas").classList.add("oculto");
-  document.getElementById("seccion-salchipapas").classList.add("oculto");
-  document.getElementById("seccion-bebidas").classList.add("oculto");
-  document.getElementById("seccion-helados").classList.add("oculto");
+            const tl = gsap.timeline();
+            tl.from(".logo-anim", { y: -20, opacity: 0, duration: 0.8, ease: "power3.out" })
+              .from(".nav-links-anim a", { y: -20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power3.out" }, "-=0.6")
+              .from(".hero-content-anim h1", { y: 50, opacity: 0, duration: 1, ease: "power4.out" }, "-=0.4")
+              .from(".hero-content-anim p", { y: 30, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.6")
+              .from(".hero-content-anim div a", { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.5)" }, "-=0.5");
 
-  // Mostrar la elegida
-  document.getElementById(idSeccion).classList.remove("oculto");
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+            gsap.to(".parallax-bg", {
+                y: "20%", ease: "none",
+                scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: true }
+            });
 
-function volverCategorias(){
-  document.getElementById("pantalla-productos").style.display = "none";
-  document.getElementById("pantalla-categorias").style.display = "block";
-}
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    nav.classList.add('bg-darker/95', 'backdrop-blur-md', 'shadow-lg');
+                    nav.classList.replace('py-6', 'py-4');
+                } else {
+                    nav.classList.remove('bg-darker/95', 'backdrop-blur-md', 'shadow-lg');
+                    nav.classList.replace('py-4', 'py-6');
+                }
+            });
 
-/* ===================================================== */
-/* LÓGICA DEL MODAL (Popup de Producto) */
-/* ===================================================== */
-function abrir(nombre, desc, precio, img, tieneIngredientes){
-  document.getElementById("modal").style.display = "flex";
-  document.getElementById("titulo").innerText = nombre;
-  document.getElementById("desc").innerText = desc;
-  document.getElementById("precio").innerText = "COP " + parseInt(precio).toLocaleString('es-CO');
-  document.getElementById("imgModal").src = img;
+            const detalleSeccion = document.getElementById('detalle-propiedad');
+            const btnCerrarDetalle = document.getElementById('btn-cerrar-detalle');
+            
+            const sTitle = document.getElementById('sec-title');
+            const sLocation = document.getElementById('sec-location');
+            const sPrice = document.getElementById('sec-price');
+            const sImg = document.getElementById('sec-img');
+            const sDesc = document.getElementById('sec-desc');
+            const sSpecs = document.getElementById('sec-specs');
 
-  productoActual = {nombre, precio};
-  let cajaIngredientes = document.getElementById("cajaIngredientes");
+            document.body.addEventListener('click', (e) => {
+                const card = e.target.closest('.property-trigger');
+                if (!card) return;
 
-  if(tieneIngredientes){
-    cajaIngredientes.style.display = "block";
-    let ingredientesHTML = "";
-    let ingredientes = ingredientesProductos[nombre] || [];
+                const title = card.getAttribute('data-title');
+                const location = card.getAttribute('data-location');
+                const price = card.getAttribute('data-price');
+                const img = card.getAttribute('data-img');
+                const desc = card.getAttribute('data-desc');
+                const beds = card.getAttribute('data-beds');
+                const baths = card.getAttribute('data-baths');
+                const sqm = card.getAttribute('data-sqm');
 
-    ingredientes.forEach((ingrediente,index)=>{
-      ingredientesHTML += `
-      <div class="ingrediente-item">
-        <label for="ing${index}">${ingrediente}</label>
-        <input type="checkbox" id="ing${index}" checked>
-      </div>`;
-    });
-    document.getElementById("ingredientesLista").innerHTML = ingredientesHTML;
-  } else {
-    cajaIngredientes.style.display = "none";
-  }
-}
+                sTitle.innerText = title;
+                sLocation.innerHTML = `<i class="fa-solid fa-location-dot text-gold mr-2"></i>${location}`;
+                sPrice.innerText = price;
+                sImg.src = img;
+                sDesc.innerText = desc;
+                sSpecs.innerHTML = `
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-bed text-gold"></i> <span>${beds}</span></div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-bath text-gold"></i> <span>${baths}</span></div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-ruler-combined text-gold"></i> <span>${sqm}</span></div>
+                    <div class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-gold"></i> <span>Seguridad 24/7</span></div>
+                `;
 
-function cerrar(){
-  document.getElementById("modal").style.display = "none";
-}
+                detalleSeccion.classList.remove('hidden');
+                detalleSeccion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                gsap.fromTo(detalleSeccion, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+            });
 
-//===================================================== //
-/* CARRITO DE COMPRAS */
-/* ===================================================== */
-function agregarCarrito(){
-  carrito.push(productoActual);
-  actualizarCarrito();
-  cerrar();
-}
+            btnCerrarDetalle.addEventListener('click', () => {
+                gsap.to(detalleSeccion, { 
+                    opacity: 0, y: 20, duration: 0.4, 
+                    onComplete: () => {
+                        detalleSeccion.classList.add('hidden');
+                        document.getElementById('catálogo').scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const catalogItems = document.querySelectorAll('.catalog-item');
 
-function actualizarCarrito(){
-  let lista = document.getElementById("lista");
-  let total = 0;
-  let html = "";
-  carrito.forEach(p => {
-    let precioNum = parseInt(p.precio);
-    total += precioNum;
-    html += `<p>${p.nombre} <span>COP ${precioNum.toLocaleString('es-CO')}</span></p>`;
-  });
-  lista.innerHTML = html;
-  document.getElementById("total").innerText = "Total: COP " + total.toLocaleString('es-CO');
-  document.getElementById("contadorCarrito").innerText = carrito.length;
-}
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-gold', 'text-darker');
+                        btn.classList.add('border', 'border-gray-600', 'text-gray-300');
+                    });
+                    button.classList.remove('border', 'border-gray-600', 'text-gray-300');
+                    button.classList.add('bg-gold', 'text-darker');
 
-function abrirCarrito(){ document.getElementById("panelCarrito").classList.add("active"); }
-function cerrarCarrito(){ document.getElementById("panelCarrito").classList.remove("active"); }
+                    const targetFilter = button.getAttribute('data-filter');
 
-function verRecibo(){
-  let nombre = document.getElementById("nombreCliente").value;
-  if(nombre.trim() === ""){ alert("Por favor ingresa tu nombre."); return; }
-  if(carrito.length === 0){ alert("Tu carrito está vacío."); return; }
+                    gsap.to(catalogItems, {
+                        scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in", onComplete: () => {
+                            catalogItems.forEach(item => {
+                                const status = item.getAttribute('data-status');
+                                if (targetFilter === 'all' || status === targetFilter) {
+                                    item.style.display = 'block';
+                                } else {
+                                    item.style.display = 'none';
+                                }
+                            });
+                            
+                            gsap.to(".catalog-item[style*='display: block']", {
+                                scale: 1, opacity: 1, duration: 0.5, ease: "power2.out", stagger: 0.1
+                            });
+                        }
+                    });
+                });
+            });
 
-  let total = 0; let detalle = "";
-  carrito.forEach(p => {
-    let precioNum = parseInt(p.precio);
-    total += precioNum;
-    detalle += "• " + p.nombre + " - COP " + precioNum.toLocaleString('es-CO') + "\n";
-  });
-  let fecha = new Date();
-  alert(
-    "🧾 RECIBO FLASH BURGER\n\n" +
-    "Cliente: " + nombre + "\n\n" +
-    "Detalle del Pedido:\n" + detalle +
-    "\nTotal a Pagar: COP " + total.toLocaleString('es-CO') +
-    "\n\nFecha: " + fecha.toLocaleString() +
-    "\n¡Gracias por tu compra!"
-  );
-}
-</script>
-
+            gsap.from(".reveal-card", {
+                scrollTrigger: { trigger: "#destacadas", start: "top 70%" },
+                y: 60, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out"
+            });
+        });
+    </script>
 </body>
 </html>
